@@ -54,6 +54,8 @@ public class UserRepresentation extends AbstractUserAdapterFederatedStorage {
     public void setSingleAttribute(String name, String value) {
         if (name.equals("phone")) {
             userEntity.setPhone(value);
+        } else if (name.equals("userlevel")) {
+            userEntity.setUserlevel(Integer.parseInt(value));
         } else {
             super.setSingleAttribute(name, value);
         }
@@ -63,9 +65,12 @@ public class UserRepresentation extends AbstractUserAdapterFederatedStorage {
     public void removeAttribute(String name) {
         if (name.equals("phone")) {
             userEntity.setPhone(null);
+        } else if (name.equals("userlevel")) {
+            userEntity.setUserlevel(null);
         } else {
             super.removeAttribute(name);
         }
+		
         userEntity = userDAO.updateUser(userEntity);
     }
 
@@ -73,6 +78,8 @@ public class UserRepresentation extends AbstractUserAdapterFederatedStorage {
     public void setAttribute(String name, List<String> values) {
         if (name.equals("phone")) {
             userEntity.setPhone(values.get(0));
+        } else if (name.equals("userlevel")) {
+            userEntity.setUserlevel(Integer.parseInt(values.get(0)));
         } else {
             super.setAttribute(name, values);
         }
@@ -83,6 +90,8 @@ public class UserRepresentation extends AbstractUserAdapterFederatedStorage {
     public String getFirstAttribute(String name) {
         if (name.equals("phone")) {
             return userEntity.getPhone();
+        } else if (name.equals("userlevel")) {
+            return userEntity.getUserlevel().toString();
         } else {
             return super.getFirstAttribute(name);
         }
@@ -94,6 +103,7 @@ public class UserRepresentation extends AbstractUserAdapterFederatedStorage {
         MultivaluedHashMap<String, String> all = new MultivaluedHashMap<>();
         all.putAll(attrs);
         all.add("phone", userEntity.getPhone());
+		all.add("userlevel", userEntity.getUserlevel().toString());
         return all;
     }
 
@@ -103,7 +113,11 @@ public class UserRepresentation extends AbstractUserAdapterFederatedStorage {
             List<String> phone = new LinkedList<>();
             phone.add(userEntity.getPhone());
             return phone;
-        } else {
+        } else if (name.equals("userlevel")) {
+            List<String> userlevel = new LinkedList<>();
+            userlevel.add(userEntity.getUserlevel().toString());
+            return userlevel;
+        }else {
             return super.getAttribute(name);
         }
     }
